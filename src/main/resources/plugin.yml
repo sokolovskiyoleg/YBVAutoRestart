@@ -1,0 +1,4 @@
+name: YBVAutoRestart
+version: '1.0-SNAPSHOT'
+main: org.yabogvk.YBVAutoRestart
+api-version: '26.1'
