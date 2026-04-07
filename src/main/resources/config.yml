@@ -1,0 +1,32 @@
+schedule:
+  restarts:
+    - 'DAILY;06:00'
+
+actions:
+  - '[time:1800] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:1800] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
+  - '[time:600] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:600] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
+  - '[time:60] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:60] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:60] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
+  - '[time:30] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:10] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:10] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:10] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
+  - '[time:5] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:4] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:3] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:2] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:1] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:0] message {PREFIX} &fСервер перезапускается. Скоро можно будет зайти снова.'
+  - '[time:0] actionbar {PREFIX} &fСервер перезапускается.'
+  - '[time:0] sound ENTITY_PLAYER_LEVELUP 1.5 1.0'
+  - '[time:0] command save-all'
+  - '[time:0] command restart'
+
+admin:
+  now-countdown-seconds: 10
+
+messages:
+  prefix: '&d&lYBVAutoRestart&r'
