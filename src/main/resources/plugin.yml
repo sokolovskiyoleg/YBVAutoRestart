@@ -1,4 +1,25 @@
 name: YBVAutoRestart
-version: '1.0-SNAPSHOT'
+version: '${project.version}'
 main: org.yabogvk.YBVAutoRestart
 api-version: '26.1'
+
+commands:
+  ybvautorestart:
+    aliases: [ar, autorestart]
+    usage: /<command> <status|reload|now|delay|stop>
+
+permissions:
+  ybvautorestart.admin.status:
+    default: op
+  ybvautorestart.admin.reload:
+    description: Reload plugin configuration
+    default: op
+  ybvautorestart.admin.now:
+    description: Start an immediate restart countdown
+    default: op
+  ybvautorestart.admin.delay:
+    description: Delay the current restart countdown
+    default: op
+  ybvautorestart.admin.stop:
+    description: Cancel the current restart countdown
+    default: op
