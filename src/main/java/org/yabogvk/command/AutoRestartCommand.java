@@ -14,6 +14,7 @@ import org.yabogvk.YBVAutoRestart;
 import org.yabogvk.command.admin.DelayCommand;
 import org.yabogvk.command.admin.NowCommand;
 import org.yabogvk.command.admin.ReloadCommand;
+import org.yabogvk.command.admin.ScheduleCommand;
 import org.yabogvk.command.admin.StatusCommand;
 import org.yabogvk.command.admin.StopCommand;
 
@@ -26,6 +27,7 @@ public final class AutoRestartCommand implements TabExecutor {
         this.plugin = plugin;
         this.register(new StatusCommand(plugin));
         this.register(new ReloadCommand(plugin));
+        this.register(new ScheduleCommand(plugin));
         this.register(new NowCommand(plugin));
         this.register(new DelayCommand(plugin));
         this.register(new StopCommand(plugin));

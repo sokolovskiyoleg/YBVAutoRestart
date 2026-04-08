@@ -9,7 +9,7 @@
 - Перезапускать сервер по расписанию.
 - Выполнять действия на нужной секунде до рестарта.
 - Показывать статус следующего рестарта.
-- Поддерживает команды `now`, `delay`, `stop`, `reload`.
+- Поддерживает команды `schedule`, `now`, `delay`, `stop`, `reload`.
 
 ## Команды
 
@@ -17,6 +17,8 @@
   Показывает, когда будет следующий рестарт.
 - `/ybvautorestart reload`
   Перезагружает конфигурацию.
+- `/ybvautorestart schedule <время>`
+  Планирует ручной рестарт через указанную длительность, например `1h30m`.
 - `/ybvautorestart now`
   Запускает принудительный рестарт.
 - `/ybvautorestart delay <секунды>`
@@ -61,11 +63,11 @@ formatting:
 
 ```yml
 messages:
-  prefix: '<light_purple><bold>YBVAutoRestart</bold></light_purple>'
+  prefix: '<gradient:#c084fc:#f0abfc><bold>YBVAutoRestart</bold></gradient>'
 ```
 
 ```yml
-- '[time:60] message {PREFIX} <white>Рестарт через <light_purple>{TIME}</light_purple>.</white>'
+- '[time:60] message {PREFIX} <white>Рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
 ```
 
 ### Legacy
@@ -142,7 +144,7 @@ schedule:
 Отправляет сообщение в чат всем игрокам.
 
 ```yml
-- '[time:60] message {PREFIX} <white>Рестарт через <light_purple>{TIME}</light_purple>.</white>'
+- '[time:60] message {PREFIX} <white>Рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
 ```
 
 #### `actionbar`
@@ -197,11 +199,11 @@ schedule:
     - 'DAILY;06:00'
 
 actions:
-  - '[time:1800] message {PREFIX} <white>Рестарт сервера через <light_purple>{TIME}</light_purple>.</white>'
+- '[time:1800] message {PREFIX} <white>Плановый рестарт сервера начнётся через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
   - '[time:1800] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:60] actionbar {PREFIX} <white>Рестарт через <light_purple>{TIME}</light_purple>.</white>'
-  - '[time:10] message {PREFIX} <white>Рестарт сервера через <light_purple>{TIME}</light_purple>.</white>'
-  - '[time:0] message {PREFIX} <white>Сервер перезапускается.</white>'
+- '[time:60] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+- '[time:10] message {PREFIX} <white>До перезапуска сервера осталось <gradient:#c4b5fd:#f0abfc>{TIME}</gradient>.</white>'
+- '[time:0] message {PREFIX} <white>Сервер сейчас перезапускается. Пожалуйста, подключитесь снова через несколько секунд.</white>'
   - '[time:0] command save-all'
   - '[time:0] command restart'
 

@@ -6,7 +6,7 @@ api-version: '26.1.1'
 commands:
   ybvautorestart:
     aliases: [ar, autorestart]
-    usage: /<command> <status|reload|now|delay|stop>
+    usage: /<command> <status|reload|schedule|now|delay|stop>
 
 permissions:
   ybvautorestart.admin.status:
@@ -16,6 +16,9 @@ permissions:
     default: op
   ybvautorestart.admin.now:
     description: Start an immediate restart countdown
+    default: op
+  ybvautorestart.admin.schedule:
+    description: Schedule a manual restart after duration
     default: op
   ybvautorestart.admin.delay:
     description: Delay the current restart countdown

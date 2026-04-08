@@ -139,6 +139,13 @@ public final class RestartScheduler {
         this.updateTaskState();
     }
 
+    public synchronized void scheduleRestartAfter(final Duration duration) {
+        this.nextRestart = LocalDateTime.now().plus(duration);
+        this.manualTarget = true;
+        this.deliveredIntervals.clear();
+        this.updateTaskState();
+    }
+
     public synchronized boolean delayRestart(final long extraSeconds) {
         if (this.nextRestart == null) {
             return false;
