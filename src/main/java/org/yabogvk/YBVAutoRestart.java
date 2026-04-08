@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.yabogvk.command.AutoRestartCommand;
 import org.yabogvk.config.ConfigManager;
 import org.yabogvk.config.LoadedConfiguration;
+import org.yabogvk.color.ColorizerProvider;
 import org.yabogvk.notification.NotificationService;
 import org.yabogvk.restart.RestartCommandRunner;
 import org.yabogvk.scheduler.CountdownTask;
@@ -23,7 +24,7 @@ public final class YBVAutoRestart extends JavaPlugin {
         this.configManager.ensureDefaultFiles();
 
         final LoadedConfiguration configuration = this.configManager.load();
-        this.notificationService = new NotificationService(this);
+        this.notificationService = new NotificationService(this, ColorizerProvider.getColorizer());
 
         final RestartCommandRunner restartCommandRunner = new RestartCommandRunner(this);
         final CountdownTask countdownTask = new CountdownTask(this);
@@ -50,6 +51,7 @@ public final class YBVAutoRestart extends JavaPlugin {
     public boolean reloadPluginConfiguration() {
         try {
             final LoadedConfiguration configuration = this.configManager.load();
+            this.notificationService.setColorizer(ColorizerProvider.getColorizer());
             this.restartScheduler.applyConfiguration(configuration);
             return true;
         } catch (RuntimeException exception) {

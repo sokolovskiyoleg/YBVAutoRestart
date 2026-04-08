@@ -1,34 +1,34 @@
 messages:
-  prefix: '&d&lYBVAutoRestart&r'
+  prefix: '<light_purple><bold>YBVAutoRestart</bold></light_purple>'
   templates:
     status:
-      none: '&eСейчас нет активного рестарта.'
-      next: '&fСледующий рестарт через &d{TIME}&f. Точное время: &d{DATETIME}&f.'
+      none: '<yellow>Сейчас нет активного рестарта.</yellow>'
+      next: '<white>Следующий рестарт через <light_purple>{TIME}</light_purple>. Точное время: <light_purple>{DATETIME}</light_purple>.</white>'
     command:
       common:
-        unknown-subcommand: '&cНеизвестная подкоманда. Используй: /{LABEL} status|reload|now|delay|stop'
+        unknown-subcommand: '<red>Неизвестная подкоманда. Используй: /{LABEL} status|reload|now|delay|stop</red>'
       status:
-        no-permission: '&cУ тебя нет прав на просмотр статуса рестарта.'
+        no-permission: '<red>У тебя нет прав на просмотр статуса рестарта.</red>'
       reload:
-        no-permission: '&cУ тебя нет прав на перезагрузку плагина.'
-        success: '&aКонфигурация плагина перезагружена.'
-        failed: '&cНе удалось перезагрузить конфигурацию. Подробности в консоли.'
+        no-permission: '<red>У тебя нет прав на перезагрузку плагина.</red>'
+        success: '<green>Конфигурация плагина перезагружена.</green>'
+        failed: '<red>Не удалось перезагрузить конфигурацию. Подробности в консоли.</red>'
       now:
-        no-permission: '&cУ тебя нет прав на принудительный рестарт.'
-        usage: '&cИспользование: /ybvautorestart now'
-        success: '&aПринудительный отсчёт до рестарта запущен на &d{TIME}&a.'
-        broadcast: '&c{PLAYER} &fзапустил рестарт через &d{TIME}&f.'
+        no-permission: '<red>У тебя нет прав на принудительный рестарт.</red>'
+        usage: '<red>Использование: /ybvautorestart now</red>'
+        success: '<green>Принудительный отсчёт до рестарта запущен на <light_purple>{TIME}</light_purple>.</green>'
+        broadcast: '<red>{PLAYER}</red> <white>запустил рестарт через <light_purple>{TIME}</light_purple>.</white>'
       delay:
-        no-permission: '&cУ тебя нет прав на перенос рестарта.'
-        usage: '&cИспользование: /ybvautorestart delay <секунды>'
-        invalid-number: '&cНекорректное число: &f{VALUE}'
-        non-positive: '&cЗадержка должна быть больше нуля.'
-        no-active: '&cСейчас нет активного рестарта для переноса.'
-        success: '&aРестарт отложен на &d{TIME}&a.'
-        broadcast: '&eРестарт был отложен на &d{TIME}&e игроком &f{PLAYER}&e.'
+        no-permission: '<red>У тебя нет прав на перенос рестарта.</red>'
+        usage: '<red>Использование: /ybvautorestart delay [секунды]</red>'
+        invalid-number: '<red>Некорректное число: <white>{VALUE}</white></red>'
+        non-positive: '<red>Задержка должна быть больше нуля.</red>'
+        no-active: '<red>Сейчас нет активного рестарта для переноса.</red>'
+        success: '<green>Рестарт отложен на <light_purple>{TIME}</light_purple>.</green>'
+        broadcast: '<yellow>Рестарт был отложен на <light_purple>{TIME}</light_purple> игроком <white>{PLAYER}</white>.</yellow>'
       stop:
-        no-permission: '&cУ тебя нет прав на остановку рестарта.'
-        usage: '&cИспользование: /ybvautorestart stop'
-        no-active: '&cСейчас нет активного рестарта для остановки.'
-        success: '&aАктивный отсчёт до рестарта отменён.'
-        broadcast: '&eАктивный отсчёт до рестарта был отменён игроком &f{PLAYER}&e.'
+        no-permission: '<red>У тебя нет прав на остановку рестарта.</red>'
+        usage: '<red>Использование: /ybvautorestart stop</red>'
+        no-active: '<red>Сейчас нет активного рестарта для остановки.</red>'
+        success: '<green>Активный отсчёт до рестарта отменён.</green>'
+        broadcast: '<yellow>Активный отсчёт до рестарта был отменён игроком <white>{PLAYER}</white>.</yellow>'

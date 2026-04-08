@@ -1,7 +1,7 @@
 name: YBVAutoRestart
 version: '${project.version}'
 main: org.yabogvk.YBVAutoRestart
-api-version: '26.1'
+api-version: '26.1.1'
 
 commands:
   ybvautorestart:

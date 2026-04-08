@@ -21,8 +21,10 @@ public final class RestartScheduler {
 
     private static final DateTimeFormatter TARGET_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    private final JavaPlugin plugin;
     private final NotificationService notificationService;
-    private final ActionExecutor actionExecutor;
+    private final RestartCommandRunner restartCommandRunner;
+    private ActionExecutor actionExecutor;
     private final CountdownTask countdownTask;
 
     private LoadedConfiguration configuration;
@@ -37,13 +39,15 @@ public final class RestartScheduler {
         final RestartCommandRunner restartCommandRunner,
         final CountdownTask countdownTask
     ) {
+        this.plugin = plugin;
         this.notificationService = notificationService;
-        this.actionExecutor = new ActionExecutor(plugin, notificationService, restartCommandRunner);
+        this.restartCommandRunner = restartCommandRunner;
         this.countdownTask = countdownTask;
     }
 
     public synchronized void applyConfiguration(final LoadedConfiguration configuration) {
         this.configuration = configuration;
+        this.actionExecutor = new ActionExecutor(this.plugin, this.notificationService, this.restartCommandRunner);
         this.scheduleCalculator = new RestartScheduleCalculator(configuration.scheduleEntries());
         this.manualTarget = false;
         this.deliveredIntervals.clear();
@@ -98,7 +102,7 @@ public final class RestartScheduler {
     }
 
     public synchronized String getPrefix() {
-        return this.configuration != null ? this.configuration.prefix() : "&d&lYBVAutoRestart&r";
+        return this.configuration != null ? this.configuration.prefix() : "<light_purple><bold>YBVAutoRestart</bold></light_purple>";
     }
 
     public synchronized String formatUserMessage(final String key) {

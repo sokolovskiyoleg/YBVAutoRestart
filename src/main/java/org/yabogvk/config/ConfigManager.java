@@ -14,6 +14,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yabogvk.action.ActionParser;
 import org.yabogvk.action.ScheduledAction;
+import org.yabogvk.action.ScheduledActionType;
+import org.yabogvk.color.ColorizerProvider;
 import org.yabogvk.scheduler.ScheduleEntry;
 
 public final class ConfigManager {
@@ -36,6 +38,7 @@ public final class ConfigManager {
         final FileConfiguration messages = YamlConfiguration.loadConfiguration(
             new File(this.plugin.getDataFolder(), "messages.yml")
         );
+        ColorizerProvider.init(config.getConfigurationSection("formatting"));
 
         final List<ScheduleEntry> scheduleEntries = this.loadScheduleEntries(config.getStringList("schedule.restarts"));
         final Map<Long, List<ScheduledAction>> actions = new ActionParser(this.plugin).parse(config.getStringList("actions"));
@@ -44,12 +47,17 @@ public final class ConfigManager {
             this.plugin.getLogger().warning("No valid actions were found. Countdown will run without executing notifications or restart commands.");
         }
 
+        final String prefix = this.loadPrefix(config, messages);
+        final Map<String, String> userMessages = this.loadUserMessages(messages);
+
+        this.warnAboutLegacyFormattingInMiniMessageMode(prefix, userMessages, actions);
+
         return new LoadedConfiguration(
             List.copyOf(scheduleEntries),
             Map.copyOf(actions),
             Math.max(1, config.getInt("admin.now-countdown-seconds", 10)),
-            this.loadPrefix(config, messages),
-            this.loadUserMessages(messages)
+            prefix,
+            userMessages
         );
     }
 
@@ -105,6 +113,43 @@ public final class ConfigManager {
 
             loadedMessages.put(fullKey, section.getString(key, ""));
         }
+    }
+
+    private void warnAboutLegacyFormattingInMiniMessageMode(
+        final String prefix,
+        final Map<String, String> userMessages,
+        final Map<Long, List<ScheduledAction>> actions
+    ) {
+        if (!ColorizerProvider.isMiniMessage()) {
+            return;
+        }
+
+        if (this.looksLikeLegacyFormatting(prefix)) {
+            this.plugin.getLogger().warning("messages.prefix looks like legacy formatting while formatting.mode=minimessage.");
+        }
+
+        for (final Map.Entry<String, String> entry : userMessages.entrySet()) {
+            if (this.looksLikeLegacyFormatting(entry.getValue())) {
+                this.plugin.getLogger().warning("messages.templates." + entry.getKey() + " looks like legacy formatting while formatting.mode=minimessage.");
+            }
+        }
+
+        for (final Map.Entry<Long, List<ScheduledAction>> entry : actions.entrySet()) {
+            for (final ScheduledAction action : entry.getValue()) {
+                if (action.type() == ScheduledActionType.MESSAGE || action.type() == ScheduledActionType.ACTIONBAR) {
+                    if (this.looksLikeLegacyFormatting(action.payload())) {
+                        this.plugin.getLogger().warning(
+                            "Action at time:" + entry.getKey() + " of type " + action.type().name().toLowerCase(Locale.ROOT)
+                                + " looks like legacy formatting while formatting.mode=minimessage."
+                        );
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean looksLikeLegacyFormatting(final String value) {
+        return value != null && value.matches(".*&[0-9a-fk-orA-FK-OR].*");
     }
 
     private ScheduleEntry parseScheduleEntry(final String rawEntry) {

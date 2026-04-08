@@ -1,33 +1,43 @@
 package org.yabogvk.notification;
 
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.yabogvk.color.Colorizer;
 
 public final class NotificationService {
 
-    private final JavaPlugin plugin;
+    private static final String DECORATION_SEPARATOR = " » ";
 
-    public NotificationService(final JavaPlugin plugin) {
+    private final JavaPlugin plugin;
+    private final LegacyComponentSerializer serializer;
+    private Colorizer colorizer;
+
+    public NotificationService(final JavaPlugin plugin, final Colorizer colorizer) {
         this.plugin = plugin;
+        this.serializer = LegacyComponentSerializer.legacySection();
+        this.colorizer = colorizer;
+    }
+
+    public void setColorizer(final Colorizer colorizer) {
+        this.colorizer = colorizer;
     }
 
     public void broadcastChat(final String message) {
-        final String resolved = this.colorize(message);
+        final String colorized = this.colorizer.colorize(message);
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(resolved);
+            player.sendMessage(colorized);
         }
     }
 
     public void broadcastActionBar(final String message) {
-        final String resolved = this.colorize(message);
+        final String colorized = this.colorizer.colorize(message);
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(resolved));
+            player.sendActionBar(this.serializer.deserialize(colorized));
         }
     }
 
@@ -38,28 +48,28 @@ public final class NotificationService {
     }
 
     public void sendInfo(final CommandSender sender, final String prefix, final String message) {
-        sender.sendMessage(this.colorize(this.decorate(prefix, message)));
+        sender.sendMessage(this.colorizer.colorize(this.decorate(prefix, message)));
         this.playResultSound(sender, true);
     }
 
     public void sendError(final CommandSender sender, final String prefix, final String message) {
-        sender.sendMessage(this.colorize(this.decorate(prefix, message)));
+        sender.sendMessage(this.colorizer.colorize(this.decorate(prefix, message)));
         this.playResultSound(sender, false);
     }
 
     public void broadcastInfo(final String prefix, final String message, final boolean sendActionBar) {
-        final String resolved = this.colorize(this.decorate(prefix, message));
-
+        final String decorated = this.decorate(prefix, message);
+        final String colorized = this.colorizer.colorize(decorated);
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(resolved);
+            player.sendMessage(colorized);
             if (sendActionBar) {
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(resolved));
+                player.sendActionBar(this.serializer.deserialize(colorized));
             }
         }
     }
 
     public void logInfo(final String prefix, final String message) {
-        this.plugin.getLogger().info(ChatColor.stripColor(this.colorize(this.decorate(prefix, message))));
+        this.plugin.getLogger().info(ChatColor.stripColor(this.colorizer.colorize(this.decorate(prefix, message))));
     }
 
     private void playResultSound(final CommandSender sender, final boolean success) {
@@ -72,10 +82,7 @@ public final class NotificationService {
     }
 
     private String decorate(final String prefix, final String message) {
-        return prefix + " &7» " + message;
+        return prefix + DECORATION_SEPARATOR + message;
     }
 
-    private String colorize(final String value) {
-        return ChatColor.translateAlternateColorCodes('&', value);
-    }
 }
