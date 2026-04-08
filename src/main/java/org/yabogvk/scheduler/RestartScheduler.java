@@ -47,7 +47,7 @@ public final class RestartScheduler {
 
     public synchronized void applyConfiguration(final LoadedConfiguration configuration) {
         this.configuration = configuration;
-        this.actionExecutor = new ActionExecutor(this.plugin, this.notificationService, this.restartCommandRunner);
+        this.actionExecutor = new ActionExecutor(this.plugin, this.notificationService, this.restartCommandRunner, configuration.timeFormat());
         this.scheduleCalculator = new RestartScheduleCalculator(configuration.scheduleEntries());
         this.manualTarget = false;
         this.deliveredIntervals.clear();
@@ -95,7 +95,7 @@ public final class RestartScheduler {
         return this.formatUserMessage(
             "status.next",
             Map.of(
-                "{TIME}", TimeFormatUtil.formatDuration(remainingSeconds),
+                "{TIME}", TimeFormatUtil.formatDuration(remainingSeconds, this.configuration.timeFormat()),
                 "{DATETIME}", TARGET_FORMATTER.format(this.nextRestart)
             )
         );
@@ -130,6 +130,10 @@ public final class RestartScheduler {
 
     public synchronized int getNowCountdownSeconds() {
         return this.configuration.nowCountdownSeconds();
+    }
+
+    public synchronized org.yabogvk.config.TimeFormatConfiguration getTimeFormatConfiguration() {
+        return this.configuration.timeFormat();
     }
 
     public synchronized void forceRestart(final long secondsUntilRestart) {

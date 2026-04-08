@@ -57,7 +57,32 @@ public final class ConfigManager {
             Map.copyOf(actions),
             Math.max(1, config.getInt("admin.now-countdown-seconds", 10)),
             prefix,
-            userMessages
+            userMessages,
+            this.loadTimeFormat(config)
+        );
+    }
+
+    private TimeFormatConfiguration loadTimeFormat(final FileConfiguration config) {
+        return new TimeFormatConfiguration(
+            this.loadTimeUnitFormat(config, "format.second", "секунду", "секунды", "секунд"),
+            this.loadTimeUnitFormat(config, "format.minute", "минуту", "минуты", "минут"),
+            this.loadTimeUnitFormat(config, "format.hour", "час", "часа", "часов"),
+            this.loadTimeUnitFormat(config, "format.day", "день", "дня", "дней"),
+            config.getString("format.splitter", " ")
+        );
+    }
+
+    private TimeUnitFormat loadTimeUnitFormat(
+        final FileConfiguration config,
+        final String path,
+        final String defaultOne,
+        final String defaultFew,
+        final String defaultMany
+    ) {
+        return new TimeUnitFormat(
+            config.getString(path + ".one", defaultOne),
+            config.getString(path + ".few", defaultFew),
+            config.getString(path + ".many", defaultMany)
         );
     }
 

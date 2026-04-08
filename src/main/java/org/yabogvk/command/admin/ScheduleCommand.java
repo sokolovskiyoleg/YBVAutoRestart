@@ -63,7 +63,7 @@ public final class ScheduleCommand implements AdminSubcommand {
         }
 
         this.plugin.getRestartScheduler().scheduleRestartAfter(duration);
-        final String formatted = TimeFormatUtil.formatDuration(duration.getSeconds());
+        final String formatted = TimeFormatUtil.formatDuration(duration.getSeconds(), this.plugin.getRestartScheduler().getTimeFormatConfiguration());
 
         this.plugin.getNotificationService().sendInfo(
             sender,
