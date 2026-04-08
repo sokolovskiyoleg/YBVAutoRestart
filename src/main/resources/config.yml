@@ -1,32 +1,109 @@
+############################################################
+# YBVAutoRestart                                            #
+# Основной конфиг автоматического рестарта сервера.         #
+#                                                          #
+# Короткая памятка:                                         #
+# - форматирование текста задаётся в formatting.serializer  #
+# - расписание задаётся в schedule.restarts                 #
+# - действия выполняются в actions сверху вниз              #
+############################################################
+
+############################################################
+# Форматирование сообщений                                  #
+#                                                          #
+# MINIMESSAGE - рекомендованный современный формат         #
+# LEGACY      - старый формат с &-кодами                   #
+############################################################
+formatting:
+  serializer: MINIMESSAGE
+
+############################################################
+# Формат отображения времени                                #
+#                                                          #
+# Используется в {TIME} для status, actions и команд.      #
+# Вы можете настроить словоформы и разделитель частей.     #
+############################################################
+format:
+  second:
+    one: 'секунду'
+    few: 'секунды'
+    many: 'секунд'
+  minute:
+    one: 'минуту'
+    few: 'минуты'
+    many: 'минут'
+  hour:
+    one: 'час'
+    few: 'часа'
+    many: 'часов'
+  day:
+    one: 'день'
+    few: 'дня'
+    many: 'дней'
+  splitter: ' '
+
+############################################################
+# Расписание рестартов                                      #
+#                                                          #
+# Поддерживаются форматы:                                  #
+# - DAILY;06:00                                            #
+# - MONDAY;18:30                                           #
+# - FRIDAY;18;30                                           #
+############################################################
 schedule:
   restarts:
     - 'DAILY;06:00'
 
+############################################################
+# Действия по таймеру                                       #
+#                                                          #
+# Общий формат строки:                                     #
+# - '[time:N] <type> <payload>'                            #
+#                                                          #
+# Поддерживаемые type:                                     #
+# - message                                                #
+# - actionbar                                              #
+# - sound                                                  #
+# - command                                                #
+#                                                          #
+# Доступные плейсхолдеры:                                  #
+# - {PREFIX}                                               #
+# - {TIME}                                                 #
+# - {SECONDS}                                              #
+#                                                          #
+# Важно: действия выполняются сверху вниз.                 #
+############################################################
 actions:
-  - '[time:1800] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:1800] message {PREFIX} <white>Плановый рестарт сервера начнётся через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
   - '[time:1800] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:600] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+  - '[time:600] message {PREFIX} <white>Пожалуйста, подготовьтесь: до рестарта сервера осталось <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
   - '[time:600] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:60] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
-  - '[time:60] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:60] message {PREFIX} <white>Сервер будет перезапущен через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient>. Благодарим за понимание.</white>'
+  - '[time:60] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
   - '[time:60] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:30] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:10] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
-  - '[time:10] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+  - '[time:30] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:10] message {PREFIX} <white>До перезапуска сервера осталось <gradient:#c4b5fd:#f0abfc>{TIME}</gradient>.</white>'
+  - '[time:10] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
   - '[time:10] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:5] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:4] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:3] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:2] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:1] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:0] message {PREFIX} &fСервер перезапускается. Скоро можно будет зайти снова.'
-  - '[time:0] actionbar {PREFIX} &fСервер перезапускается.'
+  - '[time:5] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:4] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:3] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:2] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:1] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+  - '[time:0] message {PREFIX} <white>Сервер сейчас перезапускается. Пожалуйста, подключитесь снова через несколько секунд.</white>'
+  - '[time:0] actionbar {PREFIX} <white>Сервер перезапускается</white>'
   - '[time:0] sound ENTITY_PLAYER_LEVELUP 1.5 1.0'
   - '[time:0] command save-all'
   - '[time:0] command restart'
 
+############################################################
+# Административные настройки                                #
+#                                                          #
+# now-countdown-seconds задаёт длительность отсчёта        #
+# для команды /ybvautorestart now                          #
+############################################################
 admin:
   now-countdown-seconds: 10
 
 messages:
-  prefix: '&d&lYBVAutoRestart&r'
+  prefix: '<gradient:#c084fc:#f0abfc><bold>YBVAutoRestart</bold></gradient>'

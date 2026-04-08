@@ -10,6 +10,7 @@ public record LoadedConfiguration(
     Map<Long, List<ScheduledAction>> actions,
     int nowCountdownSeconds,
     String prefix,
-    Map<String, String> userMessages
+    Map<String, String> userMessages,
+    TimeFormatConfiguration timeFormat
 ) {
 }

@@ -14,21 +14,24 @@ public final class ActionExecutor {
     private final JavaPlugin plugin;
     private final NotificationService notificationService;
     private final RestartCommandRunner restartCommandRunner;
+    private final org.yabogvk.config.TimeFormatConfiguration timeFormatConfiguration;
 
     public ActionExecutor(
         final JavaPlugin plugin,
         final NotificationService notificationService,
-        final RestartCommandRunner restartCommandRunner
+        final RestartCommandRunner restartCommandRunner,
+        final org.yabogvk.config.TimeFormatConfiguration timeFormatConfiguration
     ) {
         this.plugin = plugin;
         this.notificationService = notificationService;
         this.restartCommandRunner = restartCommandRunner;
+        this.timeFormatConfiguration = timeFormatConfiguration;
     }
 
     public void execute(final List<ScheduledAction> actions, final String prefix, final long remainingSeconds) {
         final Map<String, String> placeholders = Map.of(
             "{PREFIX}", prefix,
-            "{TIME}", TimeFormatUtil.formatDuration(remainingSeconds),
+            "{TIME}", TimeFormatUtil.formatDuration(remainingSeconds, this.timeFormatConfiguration),
             "{SECONDS}", Long.toString(remainingSeconds)
         );
 

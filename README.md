@@ -2,12 +2,14 @@
 
 Плагин для `Paper`, который автоматически перезапускает сервер по расписанию и выполняет действия по таймеру через систему `actions`.
 
+По умолчанию текстовые сообщения используют `MiniMessage`. При необходимости можно переключиться на `legacy` формат.
+
 ## Что умеет
 
 - Перезапускать сервер по расписанию.
 - Выполнять действия на нужной секунде до рестарта.
 - Показывать статус следующего рестарта.
-- Поддерживает команды `now`, `delay`, `stop`, `reload`.
+- Поддерживает команды `schedule`, `now`, `delay`, `stop`, `reload`.
 
 ## Команды
 
@@ -15,6 +17,8 @@
   Показывает, когда будет следующий рестарт.
 - `/ybvautorestart reload`
   Перезагружает конфигурацию.
+- `/ybvautorestart schedule <время>`
+  Планирует ручной рестарт через указанную длительность, например `1h30m`.
 - `/ybvautorestart now`
   Запускает принудительный рестарт.
 - `/ybvautorestart delay <секунды>`
@@ -28,12 +32,68 @@
 
 Основные разделы:
 
+- `formatting.serializer`
+  Глобальный форматтер текста: `MINIMESSAGE` или `LEGACY`.
 - `schedule.restarts`
   Расписание рестартов.
 - `actions`
   Список действий, которые выполняются на определённом времени до рестарта.
 - `admin.now-countdown-seconds`
   Через сколько секунд делать рестарт для команды `now`.
+
+## Форматирование сообщений
+
+Глобальный форматтер задаётся так:
+
+```yml
+formatting:
+  serializer: MINIMESSAGE
+```
+
+Поддерживаются значения:
+
+- `MINIMESSAGE`
+- `LEGACY`
+
+### MiniMessage
+
+Это режим по умолчанию.
+
+Примеры:
+
+```yml
+messages:
+  prefix: '<gradient:#c084fc:#f0abfc><bold>YBVAutoRestart</bold></gradient>'
+```
+
+```yml
+- '[time:60] message {PREFIX} <white>Рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
+```
+
+### Legacy
+
+Если нужен старый формат с `&`-кодами:
+
+```yml
+formatting:
+  serializer: LEGACY
+```
+
+Примеры:
+
+```yml
+messages:
+  prefix: '&d&lYBVAutoRestart'
+```
+
+```yml
+- '[time:60] message {PREFIX} &fРестарт через &d{TIME}&f.'
+```
+
+Важно:
+
+- в режиме `minimessage` legacy-строки автоматически не конвертируются,
+- `sound` actions не зависят от выбранного режима форматирования.
 
 ## Формат расписания
 
@@ -84,7 +144,7 @@ schedule:
 Отправляет сообщение в чат всем игрокам.
 
 ```yml
-- '[time:60] message {PREFIX} &fРестарт через &d{TIME}&f.'
+- '[time:60] message {PREFIX} <white>Рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
 ```
 
 #### `actionbar`
@@ -92,7 +152,7 @@ schedule:
 Отправляет сообщение в action bar всем игрокам.
 
 ```yml
-- '[time:10] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
+- '[time:10] actionbar {PREFIX} <white>Рестарт через <light_purple>{TIME}</light_purple>.</white>'
 ```
 
 #### `sound`
@@ -131,16 +191,19 @@ schedule:
 ## Пример
 
 ```yml
+formatting:
+  serializer: MINIMESSAGE
+
 schedule:
   restarts:
     - 'DAILY;06:00'
 
 actions:
-  - '[time:1800] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
+- '[time:1800] message {PREFIX} <white>Плановый рестарт сервера начнётся через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
   - '[time:1800] sound ENTITY_PLAYER_LEVELUP 1.0 1.0'
-  - '[time:60] actionbar {PREFIX} &fРестарт через &d{TIME}&f.'
-  - '[time:10] message {PREFIX} &fРестарт сервера через &d{TIME}&f.'
-  - '[time:0] message {PREFIX} &fСервер перезапускается.'
+- '[time:60] actionbar {PREFIX} <white>Рестарт через <gradient:#c4b5fd:#f0abfc>{TIME}</gradient></white>'
+- '[time:10] message {PREFIX} <white>До перезапуска сервера осталось <gradient:#c4b5fd:#f0abfc>{TIME}</gradient>.</white>'
+- '[time:0] message {PREFIX} <white>Сервер сейчас перезапускается. Пожалуйста, подключитесь снова через несколько секунд.</white>'
   - '[time:0] command save-all'
   - '[time:0] command restart'
 

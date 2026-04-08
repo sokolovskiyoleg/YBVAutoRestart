@@ -1,34 +1,78 @@
+############################################################
+# Шаблоны сообщений                                         #
+#                                                          #
+# Этот файл содержит ответы игрокам и администраторам.     #
+# Формат текста зависит от formatting.serializer в config. #
+# По умолчанию используется MiniMessage.                   #
+############################################################
 messages:
-  prefix: '&d&lYBVAutoRestart&r'
+  prefix: '<gradient:#c084fc:#f0abfc><bold>YBVAutoRestart</bold></gradient>'
   templates:
+    ########################################################
+    # Сообщения статуса                                     #
+    ########################################################
     status:
-      none: '&eСейчас нет активного рестарта.'
-      next: '&fСледующий рестарт через &d{TIME}&f. Точное время: &d{DATETIME}&f.'
+      none: '<yellow>Сейчас активный рестарт не запланирован.</yellow>'
+      next: '<white>Следующий рестарт ожидается через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>. Точное время: <gradient:#d8b4fe:#f0abfc>{DATETIME}</gradient>.</white>'
+
     command:
+      ######################################################
+      # Общие сообщения команд                             #
+      ######################################################
       common:
-        unknown-subcommand: '&cНеизвестная подкоманда. Используй: /{LABEL} status|reload|now|delay|stop'
+        unknown-subcommand: '<color:#fda4af>Не удалось распознать подкоманду.</color> <white>Используйте: <gradient:#c4b5fd:#f0abfc>/{LABEL} status|reload|schedule|now|delay|stop</gradient></white>'
+
+      ######################################################
+      # /ybvautorestart status                             #
+      ######################################################
       status:
-        no-permission: '&cУ тебя нет прав на просмотр статуса рестарта.'
+        no-permission: '<color:#fda4af>У вас нет прав для просмотра статуса рестарта.</color>'
+
+      ######################################################
+      # /ybvautorestart reload                             #
+      ######################################################
       reload:
-        no-permission: '&cУ тебя нет прав на перезагрузку плагина.'
-        success: '&aКонфигурация плагина перезагружена.'
-        failed: '&cНе удалось перезагрузить конфигурацию. Подробности в консоли.'
+        no-permission: '<color:#fda4af>У вас нет прав для перезагрузки конфигурации плагина.</color>'
+        success: '<color:#86efac>Конфигурация плагина была успешно перезагружена.</color>'
+        failed: '<color:#fda4af>Не удалось перезагрузить конфигурацию. Пожалуйста, проверьте консоль сервера.</color>'
+
+      ######################################################
+      # /ybvautorestart schedule                           #
+      ######################################################
+      schedule:
+        no-permission: '<color:#fda4af>У вас нет прав для планирования ручного рестарта.</color>'
+        usage: '<color:#fda4af>Использование:</color> <white>/ybvautorestart schedule [время]</white> <gray>(пример: 1h30m)</gray>'
+        invalid-duration: '<color:#fda4af>Не удалось распознать время:</color> <white>{VALUE}</white> <gray>(пример: 1h30m)</gray>'
+        success: '<color:#86efac>Ручной рестарт запланирован через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</color>'
+        broadcast: '<white>Игрок <gradient:#c084fc:#f0abfc>{PLAYER}</gradient> запланировал рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
+
+      ######################################################
+      # /ybvautorestart now                                #
+      ######################################################
       now:
-        no-permission: '&cУ тебя нет прав на принудительный рестарт.'
-        usage: '&cИспользование: /ybvautorestart now'
-        success: '&aПринудительный отсчёт до рестарта запущен на &d{TIME}&a.'
-        broadcast: '&c{PLAYER} &fзапустил рестарт через &d{TIME}&f.'
+        no-permission: '<color:#fda4af>У вас нет прав для принудительного запуска рестарта.</color>'
+        usage: '<color:#fda4af>Использование:</color> <white>/ybvautorestart now</white>'
+        success: '<color:#86efac>Принудительный отсчёт до рестарта запущен на <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</color>'
+        broadcast: '<white>Игрок <gradient:#c084fc:#f0abfc>{PLAYER}</gradient> запустил рестарт через <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</white>'
+
+      ######################################################
+      # /ybvautorestart delay                              #
+      ######################################################
       delay:
-        no-permission: '&cУ тебя нет прав на перенос рестарта.'
-        usage: '&cИспользование: /ybvautorestart delay <секунды>'
-        invalid-number: '&cНекорректное число: &f{VALUE}'
-        non-positive: '&cЗадержка должна быть больше нуля.'
-        no-active: '&cСейчас нет активного рестарта для переноса.'
-        success: '&aРестарт отложен на &d{TIME}&a.'
-        broadcast: '&eРестарт был отложен на &d{TIME}&e игроком &f{PLAYER}&e.'
+        no-permission: '<color:#fda4af>У вас нет прав для переноса рестарта.</color>'
+        usage: '<color:#fda4af>Использование:</color> <white>/ybvautorestart delay [секунды]</white>'
+        invalid-number: '<color:#fda4af>Не удалось распознать число:</color> <white>{VALUE}</white>'
+        non-positive: '<color:#fda4af>Значение задержки должно быть больше нуля.</color>'
+        no-active: '<color:#fda4af>Сейчас нет активного рестарта, который можно перенести.</color>'
+        success: '<color:#86efac>Рестарт был отложен на <gradient:#d8b4fe:#f0abfc>{TIME}</gradient>.</color>'
+        broadcast: '<yellow>Рестарт был отложен на <gradient:#d8b4fe:#f0abfc>{TIME}</gradient> игроком <white>{PLAYER}</white>.</yellow>'
+
+      ######################################################
+      # /ybvautorestart stop                               #
+      ######################################################
       stop:
-        no-permission: '&cУ тебя нет прав на остановку рестарта.'
-        usage: '&cИспользование: /ybvautorestart stop'
-        no-active: '&cСейчас нет активного рестарта для остановки.'
-        success: '&aАктивный отсчёт до рестарта отменён.'
-        broadcast: '&eАктивный отсчёт до рестарта был отменён игроком &f{PLAYER}&e.'
+        no-permission: '<color:#fda4af>У вас нет прав для остановки активного рестарта.</color>'
+        usage: '<color:#fda4af>Использование:</color> <white>/ybvautorestart stop</white>'
+        no-active: '<color:#fda4af>Сейчас нет активного рестарта, который можно остановить.</color>'
+        success: '<color:#86efac>Активный отсчёт до рестарта был отменён.</color>'
+        broadcast: '<yellow>Активный отсчёт до рестарта был отменён игроком <white>{PLAYER}</white>.</yellow>'

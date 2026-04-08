@@ -59,7 +59,7 @@ public final class DelayCommand implements AdminSubcommand {
             return;
         }
 
-        final String formatted = TimeFormatUtil.formatDuration(extraSeconds);
+        final String formatted = TimeFormatUtil.formatDuration(extraSeconds, this.plugin.getRestartScheduler().getTimeFormatConfiguration());
         this.plugin.getNotificationService().sendInfo(
             sender,
             this.plugin.getRestartScheduler().getPrefix(),

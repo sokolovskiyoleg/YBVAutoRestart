@@ -38,7 +38,7 @@ public final class NowCommand implements AdminSubcommand {
 
         final int seconds = this.plugin.getRestartScheduler().getNowCountdownSeconds();
         this.plugin.getRestartScheduler().forceRestart(seconds);
-        final String formatted = TimeFormatUtil.formatDuration(seconds);
+        final String formatted = TimeFormatUtil.formatDuration(seconds, this.plugin.getRestartScheduler().getTimeFormatConfiguration());
 
         this.plugin.getNotificationService().sendInfo(
             sender,
